@@ -66,6 +66,72 @@ describe("tests for /restaurants", () => {
     );
   });
 
+  test("POST returns error obj when name field is empty", async () => {
+    const response = await request(app).post("/restaurants").send({
+      name: "",
+      location: "Kennesaw",
+      cuisine: "Tropical",
+    });
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        error: [
+          {
+            type: "field",
+            value: "",
+            msg: "Invalid value",
+            path: "name",
+            location: "body",
+          },
+        ],
+      })
+    );
+  });
+
+  test("POST returns error obj when location field is empty", async () => {
+    const response = await request(app).post("/restaurants").send({
+      name: "Name",
+      location: "",
+      cuisine: "Tropical",
+    });
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        error: [
+          {
+            type: "field",
+            value: "",
+            msg: "Invalid value",
+            path: "location",
+            location: "body",
+          },
+        ],
+      })
+    );
+  });
+
+  test("POST returns error obj when cuisine field is empty", async () => {
+    const response = await request(app).post("/restaurants").send({
+      name: "Name",
+      location: "location",
+      cuisine: "",
+    });
+
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        error: [
+          {
+            type: "field",
+            value: "",
+            msg: "Invalid value",
+            path: "cuisine",
+            location: "body",
+          },
+        ],
+      })
+    );
+  });
+
   test("PUT /restaurants/:id", async () => {
     const response = await request(app)
       .put("/restaurants/1")
